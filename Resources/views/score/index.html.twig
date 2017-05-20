@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Scores list</h1>
+
+    <ul>
+        <li>
+            <a href="{{ path('score_new') }}">Create a new score</a>
+        </li>
+    </ul>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Createdat</th>
+                <th>Points</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for score in scores %}
+            <tr>
+                <td><a href="{{ path('score_show', { 'id': score.id }) }}">{{ score.id }}</a></td>
+                <td>{% if score.createdAt %}{{ score.createdAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{{ score.points }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('score_show', { 'id': score.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('score_edit', { 'id': score.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

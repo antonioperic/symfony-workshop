@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity repository-class="WorkshopBundle\Repository\UserRepository" name="WorkshopBundle\Entity\User">
+        <id name="id" type="integer" column="id">
+            <generator strategy="AUTO"/>
+        </id>
+        <field name="firstName" type="string" column="first_name" length="255"/>
+        <field name="lastName" type="string" column="last_name" length="255"/>
+        <field name="email" type="string" column="email" length="255" unique="true"/>
+        <field name="previousPosition" type="integer" column="previous_position"/>
+        <field name="currentPosition" type="integer" column="current_position"/>
+        <field name="totalScore" type="string" column="total_score" length="255"/>
+        <field name="lastPlayedAt" type="datetime" column="last_played_at" nullable="true"/>
+        <field name="createdAt" type="datetime" column="created_at"/>
+    </entity>
+</doctrine-mapping>

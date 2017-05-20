@@ -1,0 +1,5 @@
+WorkshopBundle\Entity\Score:
+    score_{1..1000}:
+        user: '@user*'
+        points: <numberBetween(0, 99999)>
+        createdAt: <dateTimeBetween('-10 months', 'now')>

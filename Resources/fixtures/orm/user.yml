@@ -1,0 +1,9 @@
+WorkshopBundle\Entity\User:
+    user_{1..100}:
+        firstName: <firstName()>
+        lastName: <lastName()>
+        email (unique): <lastName()>
+        previousPosition: 0
+        currentPosition: 0
+        totalScore: 0
+        createdAt: <dateTimeBetween('-10 months', 'now')>
