@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
+use WorkshopBundle\Entity\User;
 
 /**
  * Score controller.
@@ -23,9 +24,7 @@ class ScoreController extends Controller
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $scores = $em->getRepository('WorkshopBundle:Score')->findAll();
+        $scores = $this->get('workshop.repository.score')->findAll();
 
         return $this->render(
             'WorkshopBundle::score/index.html.twig',
@@ -156,19 +155,19 @@ class ScoreController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $users = $em->getRepository('WorkshopBundle:User')->findAll();
+        $users = $this->get('workshop.repository.user')->findAll();
 
         // update user score
         foreach ($users as $user) {
             /** @var User $user */
-            $totalScore = $em->getrepository('WorkshopBundle:Score')->findTotalScoreByUser($user);
+            $totalScore = $this->get('workshop.repository.score')->findTotalScoreByUser($user);
             $user->setTotalScore($totalScore['totalPoints']);
 
             $em->flush();
         }
 
         // update user positions
-        $users = $em->getRepository('WorkshopBundle:User')->findAll();
+        $users = $this->get('workshop.repository.user')->findAll();
         foreach ($users as $key => $user) {
             /** @var User $user */
             $user->setPreviousPosition($user->getCurrentPosition());

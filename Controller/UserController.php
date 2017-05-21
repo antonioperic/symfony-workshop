@@ -25,27 +25,25 @@ class UserController extends Controller
      */
     public function updateScores()
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $users = $em->getrepository('WorkshopBundle:User')->findAll();
+        $users = $this->get('workshop.repository.user')->findAll();
 
         // update user score
         foreach ($users as $user) {
             /** @var User $user */
-            $totalScore = $em->getRepository('WorkshopBundle:Score')->findTotalScoreByUser($user);
+            $totalScore = $this->get('workshop.repository.score')->findTotalScoreByUser($user);
             $user->setTotalScore($totalScore['totalPoints']);
 
-            $em->flush();
+            $this->getDoctrine()->getManager()->flush();
         }
 
         // update user positions
-        $users = $em->getrepository('WorkshopBundle:User')->findAll();
+        $users = $this->get('workshop.repository.user')->findAll();
         foreach ($users as $key => $user) {
             /** @var User $user */
             $user->setPreviousPosition($user->getCurrentPosition());
             $user->setCurrentPosition($key + 1);
 
-            $em->flush();
+            $this->getDoctrine()->getManager()->flush();
         }
 
 
@@ -60,9 +58,7 @@ class UserController extends Controller
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $users = $em->getrepository('WorkshopBundle:User')->findAll();
+        $users = $this->get('workshop.repository.user')->findAll();
 
         return $this->render(
             'WorkshopBundle::user/index.html.twig',
@@ -89,9 +85,7 @@ class UserController extends Controller
             $em->persist($user);
             $em->flush();
 
-            $em = $this->getDoctrine()->getManager();
-
-            $users = $em->getRepository('WorkshopBundle:User')->findAll();
+            $users = $this->get('workshop.repository.user')->findAll();
 
             // update user score
             foreach ($users as $user) {
@@ -103,7 +97,7 @@ class UserController extends Controller
             }
 
             // update user positions
-            $users = $em->getRepository('WorkshopBundle:User')->findAll();
+            $users = $this->get('workshop.repository.user')->findAll();
             foreach ($users as $key => $user) {
                 /** @var User $user */
                 $user->setPreviousPosition($user->getCurrentPosition());
@@ -190,7 +184,7 @@ class UserController extends Controller
 
         $em = $this->getDoctrine()->getManager();
 
-        $users = $em->getRepository('WorkshopBundle:User')->findAll();
+        $users = $this->get('workshop.repository.user')->findAll();
 
         // update user score
         foreach ($users as $user) {
@@ -202,7 +196,7 @@ class UserController extends Controller
         }
 
         // update user positions
-        $users = $em->getRepository('WorkshopBundle:User')->findAll();
+        $users = $this->get('workshop.repository.user')->findAll();
         foreach ($users as $key => $user) {
             /** @var User $user */
             $user->setPreviousPosition($user->getCurrentPosition());
