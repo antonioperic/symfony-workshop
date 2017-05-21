@@ -25,27 +25,7 @@ class UserController extends Controller
      */
     public function updateScores()
     {
-        $users = $this->get('workshop.repository.user')->findAll();
-
-        // update user score
-        foreach ($users as $user) {
-            /** @var User $user */
-            $totalScore = $this->get('workshop.repository.score')->findTotalScoreByUser($user);
-            $user->setTotalScore($totalScore['totalPoints']);
-
-            $this->getDoctrine()->getManager()->flush();
-        }
-
-        // update user positions
-        $users = $this->get('workshop.repository.user')->findAll();
-        foreach ($users as $key => $user) {
-            /** @var User $user */
-            $user->setPreviousPosition($user->getCurrentPosition());
-            $user->setCurrentPosition($key + 1);
-
-            $this->getDoctrine()->getManager()->flush();
-        }
-
+        $this->get('workshop.handler.table_ranking')->update();
 
         return new Response('Table updated');
     }
@@ -85,26 +65,7 @@ class UserController extends Controller
             $em->persist($user);
             $em->flush();
 
-            $users = $this->get('workshop.repository.user')->findAll();
-
-            // update user score
-            foreach ($users as $user) {
-                /** @var User $user */
-                $totalScore = $em->getrepository('WorkshopBundle:Score')->findTotalScoreByUser($user);
-                $user->setTotalScore($totalScore['totalPoints']);
-
-                $em->flush();
-            }
-
-            // update user positions
-            $users = $this->get('workshop.repository.user')->findAll();
-            foreach ($users as $key => $user) {
-                /** @var User $user */
-                $user->setPreviousPosition($user->getCurrentPosition());
-                $user->setCurrentPosition($key + 1);
-
-                $em->flush();
-            }
+            $this->get('workshop.handler.table_ranking')->update();
 
             return $this->redirectToRoute('user_show', array('id' => $user->getId()));
         }
@@ -182,28 +143,7 @@ class UserController extends Controller
             $em->flush();
         }
 
-        $em = $this->getDoctrine()->getManager();
-
-        $users = $this->get('workshop.repository.user')->findAll();
-
-        // update user score
-        foreach ($users as $user) {
-            /** @var User $user */
-            $totalScore = $em->getrepository('WorkshopBundle:Score')->findTotalScoreByUser($user);
-            $user->setTotalScore($totalScore['totalPoints']);
-
-            $em->flush();
-        }
-
-        // update user positions
-        $users = $this->get('workshop.repository.user')->findAll();
-        foreach ($users as $key => $user) {
-            /** @var User $user */
-            $user->setPreviousPosition($user->getCurrentPosition());
-            $user->setCurrentPosition($key + 1);
-
-            $em->flush();
-        }
+        $this->get('workshop.handler.table_ranking')->update();
 
         return $this->redirectToRoute('user_index');
     }
