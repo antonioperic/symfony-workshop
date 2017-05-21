@@ -89,6 +89,29 @@ class UserController extends Controller
             $em->persist($user);
             $em->flush();
 
+            $em = $this->getDoctrine()->getManager();
+
+            $users = $em->getRepository('WorkshopBundle:User')->findAll();
+
+            // update user score
+            foreach ($users as $user) {
+                /** @var User $user */
+                $totalScore = $em->getrepository('WorkshopBundle:Score')->findTotalScoreByUser($user);
+                $user->setTotalScore($totalScore['totalPoints']);
+
+                $em->flush();
+            }
+
+            // update user positions
+            $users = $em->getRepository('WorkshopBundle:User')->findAll();
+            foreach ($users as $key => $user) {
+                /** @var User $user */
+                $user->setPreviousPosition($user->getCurrentPosition());
+                $user->setCurrentPosition($key + 1);
+
+                $em->flush();
+            }
+
             return $this->redirectToRoute('user_show', array('id' => $user->getId()));
         }
 
@@ -162,6 +185,29 @@ class UserController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->remove($user);
+            $em->flush();
+        }
+
+        $em = $this->getDoctrine()->getManager();
+
+        $users = $em->getRepository('WorkshopBundle:User')->findAll();
+
+        // update user score
+        foreach ($users as $user) {
+            /** @var User $user */
+            $totalScore = $em->getrepository('WorkshopBundle:Score')->findTotalScoreByUser($user);
+            $user->setTotalScore($totalScore['totalPoints']);
+
+            $em->flush();
+        }
+
+        // update user positions
+        $users = $em->getRepository('WorkshopBundle:User')->findAll();
+        foreach ($users as $key => $user) {
+            /** @var User $user */
+            $user->setPreviousPosition($user->getCurrentPosition());
+            $user->setCurrentPosition($key + 1);
+
             $em->flush();
         }
 
